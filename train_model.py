@@ -9,7 +9,10 @@ import joblib
 
 # Function to extract HOG features
 def extract_hog_features(image):
-    features, hog_image = hog(image, pixels_per_cell=(8, 8), cells_per_block=(2, 2), visualize=True, multichannel=True)
+    if len(image.shape) > 2 and image.shape[2] == 3:
+        # Convert to grayscale
+        image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    features, hog_image = hog(image, pixels_per_cell=(8, 8), cells_per_block=(2, 2), visualize=True)
     return features
 
 # Load and preprocess data
@@ -28,7 +31,7 @@ def load_data(data_dir):
     return np.array(features), np.array(labels)
 
 # Main script
-data_dir = 'path/to/your/data'
+data_dir = '.'
 features, labels = load_data(data_dir)
 X_train, X_test, y_train, y_test = train_test_split(features, labels, test_size=0.2, random_state=42)
 
@@ -43,3 +46,4 @@ print(classification_report(y_test, y_pred))
 
 # Save the trained model
 joblib.dump(model, 'logistic_model.pkl')
+
