@@ -4,8 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Recyclable Item Classifier</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
+
+    <button class="tablink" onclick="openPage('Classifier', this, 'green')">Classifier</button>
+      <button class="tablink" onclick="openPage('Carbon', this, 'green')" id="defaultOpen">Carbon</button>
+
+<div id="Classifier" class="tabcontent">
     <h1>Recyclable Item Classifier</h1>
     <form action="/" method="post" enctype="multipart/form-data">
         <label for="file">Upload an image:</label>
@@ -15,5 +21,92 @@
     {% if prediction %}
         <h2>Prediction: {{ prediction }}</h2>
     {% endif %}
-</body>
-</html>
+</div>
+
+<div id="Carbon" class="tabcontent">
+    <div class="container">
+        <h1>Carbon Footprint Calculator</h1>
+        <div class="tabs">
+            <button class="tab-button" onclick="openTab(event, 'simple')">Simple</button>
+            <button class="tab-button" onclick="openTab(event, 'advanced')">Advanced</button>
+        </div>
+
+        <div id="simple" class="tab-content">
+            <form id="simpleForm">
+                <label for="transportationSimple">Transportation (miles driven per week):
+                    <span class="tooltip">Distance you drive each week</span>
+                </label>
+                <input type="number" id="transportationSimple" required>
+              <br>
+                <label for="electricitySimple">Electricity Usage (kWh per month):
+                    <span class="tooltip">Monthly electricity consumption</span>
+                </label>
+                <input type="number" id="electricitySimple" required>
+
+                <button type="button" onclick="calculateFootprint('simple')">Calculate</button>
+            </form>
+        </div>
+
+        <div id="advanced" class="tab-content">
+            <form id="advancedForm">
+                <label for="transportation">Transportation (miles driven per week):
+                    <span class="tooltip">Distance you drive each week</span>
+                </label>
+                <input type="number" id="transportation" required>
+              <br>
+                <label for="electricity">Electricity Usage (kWh per month):
+                    <span class="tooltip">Monthly electricity consumption</span>
+                </label>
+                <input type="number" id="electricity" required>
+              <br>
+                <label for="gas">Gas Usage (therms per month):
+                    <span class="tooltip">Monthly gas consumption</span>
+                </label>
+                <input type="number" id="gas" required>
+              <br>
+                <label for="waste">Waste Production (lbs per week):
+                    <span class="tooltip">Weekly waste production</span>
+                </label>
+                <input type="number" id="waste" required>
+              <br>
+                <label for="water">Water Usage (gallons per month):
+                    <span class="tooltip">Monthly water consumption</span>
+                </label>
+                <input type="number" id="water" required>
+              <br>
+                <button type="button" onclick="calculateFootprint('advanced')">Calculate</button>
+            </form>
+        </div>
+
+        <div id="results">
+            <h2>Results</h2>
+            <p id="carbonResult">Carbon Footprint: N/A</p>
+            <button onclick="saveData()">Save Data</button>
+            <button onclick="loadData()">Load Data</button>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style_carbon.css') }}">
+</div>
+
+     <script>
+        function openPage(pageName,elmnt,color) {
+          var i, tabcontent, tablinks;
+          tabcontent = document.getElementsByClassName("tabcontent");
+          for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+          }
+          tablinks = document.getElementsByClassName("tablink");
+          for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].style.backgroundColor = "";
+          }
+          document.getElementById(pageName).style.display = "block";
+          elmnt.style.backgroundColor = color;
+        }
+
+        // Get the element with id="defaultOpen" and click on it
+        document.getElementById("defaultOpen").click();
+        </script>
+    </body>
+    </html>
